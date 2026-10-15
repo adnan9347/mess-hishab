@@ -381,7 +381,10 @@ export class App {
           <div class="brand-mark"><span class="brand-mark__logo"><i class="bi bi-journal-check"></i></span><span>${this.t('app.name')}</span></div>
           ${mess ? `<div class="sidebar__mess"><div class="tw-text-xs tw-text-muted">${this.i18n.monthName(mess.currentMonth)}</div><div class="tw-font-semibold tw-truncate">${esc(mess.name)}</div></div>` : ''}
           <nav class="sidebar__nav" aria-label="${esc(this.t('nav.label'))}" data-nav="side">${this.navLinks(activeTab, pending, 'side')}</nav>
-          <div class="sidebar__foot">${this.localeSwitch()}</div>
+          <div class="sidebar__foot">
+            ${this.localeSwitch()}
+            ${this.logoutButton('side')}
+          </div>
         </aside>
         <div class="shell__main">
           <header class="topbar">
@@ -393,6 +396,7 @@ export class App {
             </div>
             <div class="topbar__actions">
               <span class="offline-chip d-none" data-offline><i class="bi bi-cloud-slash"></i> ${this.t('common.offline')}</span>
+              ${this.logoutButton('top')}
               <a href="#/settings" class="avatar-link" aria-label="${esc(this.t('nav.settings'))}">${avatar({ uid: this.uid, displayName: this.displayName() }, 36)}</a>
             </div>
           </header>
@@ -440,6 +444,14 @@ export class App {
       </div>`;
   }
 
+  /** Log out sits in the menu bar: an icon in the phone top bar, a labelled button in the desktop sidebar. */
+  logoutButton(variant) {
+    const label = esc(this.t('settings.logout'));
+    return variant === 'side'
+      ? `<button type="button" class="logout-btn" data-action="logout"><i class="bi bi-box-arrow-right"></i><span>${label}</span></button>`
+      : `<span class="lg:tw-hidden"><button type="button" class="icon-btn" data-action="logout" aria-label="${label}" title="${label}"><i class="bi bi-box-arrow-right"></i></button></span>`;
+  }
+
   localeSwitch() {
     const l = this.i18n.locale;
     return `
@@ -463,6 +475,15 @@ export class App {
         case 'set-locale':
           this.setLocale(el.dataset.locale);
           break;
+        case 'logout': {
+          const ok = await this.confirm({
+            title: this.t('settings.logoutConfirm'),
+            body: `<p class="tw-text-sm tw-text-muted tw-mb-0">${esc(this.t('settings.logoutBody'))}</p>`,
+            confirmText: this.t('settings.logout')
+          });
+          if (ok) await this.auth.signOut();
+          break;
+        }
         case 'dismiss-verify':
           this.verifyDismissed = true;
           el.closest('.verify-banner')?.remove();

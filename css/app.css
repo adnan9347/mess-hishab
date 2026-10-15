@@ -375,7 +375,14 @@ a { color: inherit; }
   }
   .sidebar__nav .nav-item__icon { font-size: 18px; }
   .sidebar__nav .nav-item.is-active { background: rgb(var(--c-brand-soft)); color: rgb(var(--c-brand)); }
-  .sidebar__foot { display: flex; align-items: center; justify-content: space-between; padding: 0 4px; }
+  .sidebar__foot { display: flex; flex-direction: column; align-items: stretch; gap: 10px; padding: 0 4px; }
+  .sidebar__foot .locale-switch { align-self: flex-start; }
+  .logout-btn {
+    display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 14px; border: 0; border-radius: 12px;
+    background: transparent; color: rgb(var(--c-text-2)); font: 600 15px var(--font); text-align: left;
+    transition: background 0.15s, color 0.15s;
+  }
+  .logout-btn:hover { background: rgb(var(--c-brand-soft)); color: rgb(var(--c-brand-strong)); }
   .topbar { padding: 0 32px; }
   .content { padding: 16px 32px 48px; }
   .bottom-nav { display: none; }

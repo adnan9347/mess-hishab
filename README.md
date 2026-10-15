@@ -1,5 +1,7 @@
 # মেস হিসাব · Mess Hishab
 
+> **বাংলায় পড়ুন:** [README.bn.md](README.bn.md) — অ্যাপ দিয়ে কী কী করা যায় · **Live:** <https://mess-hishab.vercel.app>
+
 Meal and bazar accounting for student messes in Bangladesh. Members tap the meals they eat; the app works out the
 meal rate, each person's share and a month-end settlement of who pays whom — replacing the manager's notebook.
 

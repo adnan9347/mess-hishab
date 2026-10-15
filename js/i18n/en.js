@@ -115,7 +115,7 @@ export default {
     handoverFirst: 'Hand the manager role to someone else first.',
     data: 'Your data', dataHint: 'Your monthly results and daily snapshots are kept for at least {n} days.',
     downloadAll: 'Download all my data', resetDemo: 'Reset demo mess', resetDemoBody: 'Rebuilds the demo mess with fresh sample data.',
-    resetDone: 'Demo mess reset', logout: 'Log out', leave: 'Leave this mess', leaveBody: 'You will stop seeing this mess. Saved results stay until they expire.',
+    resetDone: 'Demo mess reset', logout: 'Log out', logoutConfirm: 'Log out?', logoutBody: 'You’ll need your email and password to come back. Your hishab stays saved.', leave: 'Leave this mess', leaveBody: 'You will stop seeing this mess. Saved results stay until they expire.',
     deleteAccount: 'Delete account', deleteBody: 'This permanently deletes your account and profile. It cannot be undone.'
   },
   invite: { message: 'Join our mess "{mess}" on Mess Hishab 🍛\nInvite code: {code}\n{url}' },
