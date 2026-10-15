@@ -1,0 +1,157 @@
+rules_version = '2';
+
+// Mess Hishab — Firestore security rules (free Spark plan, no Cloud Functions).
+// Retention requirement: calculation data (snapshots, results, closed months) must live ≥ 30 days.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------- helpers ----------
+    function signedIn() { return request.auth != null; }
+    function me() { return request.auth.uid; }
+    function messDoc(messId) { return get(/databases/$(database)/documents/messes/$(messId)).data; }
+    function isMember(messId) { return signedIn() && me() in messDoc(messId).memberUids; }
+    function isManager(messId) { return signedIn() && messDoc(messId).managerUid == me(); }
+    function monthDoc(messId, monthId) { return get(/databases/$(database)/documents/messes/$(messId)/months/$(monthId)).data; }
+    function monthOpen(messId, monthId) { return monthDoc(messId, monthId).status == 'open'; }
+    // 30 days minus one hour of clock-skew tolerance.
+    function keepsThirtyDays(ts) { return ts is timestamp && ts >= request.time + duration.value(719, 'h'); }
+    function expired() { return resource.data.expireAt is timestamp && resource.data.expireAt < request.time; }
+    function onlyChanges(keys) { return request.resource.data.diff(resource.data).affectedKeys().hasOnly(keys); }
+
+    // ---------- profiles ----------
+    match /users/{uid} {
+      allow read, write: if signedIn() && me() == uid;
+    }
+
+    // ---------- invite codes: get by exact code only, never list ----------
+    match /inviteCodes/{code} {
+      allow get: if signedIn();
+      allow list: if false;
+      allow create: if signedIn()
+        && request.resource.data.createdBy == me()
+        && getAfter(/databases/$(database)/documents/messes/$(request.resource.data.messId)).data.managerUid == me();
+      allow update, delete: if false;
+    }
+
+    // ---------- messes ----------
+    match /messes/{messId} {
+      allow read: if isMember(messId);
+
+      allow create: if signedIn()
+        && request.resource.data.managerUid == me()
+        && request.resource.data.memberUids == [me()]
+        && request.resource.data.retentionDays >= 30;
+
+      // Manager edits settings; retention can never go below 30 days.
+      allow update: if isManager(messId)
+        && (!('retentionDays' in request.resource.data) || request.resource.data.retentionDays >= 30)
+        && (request.resource.data.managerUid == resource.data.managerUid
+            || request.resource.data.managerUid in resource.data.memberUids);
+
+      // Self-join: only add yourself, and only with a member doc that carries this mess's invite code.
+      allow update: if signedIn()
+        && !(me() in resource.data.memberUids)
+        && onlyChanges(['memberUids'])
+        && request.resource.data.memberUids.hasAll(resource.data.memberUids)
+        && request.resource.data.memberUids.size() == resource.data.memberUids.size() + 1
+        && me() in request.resource.data.memberUids
+        && getAfter(/databases/$(database)/documents/messes/$(messId)/members/$(me())).data.inviteCode == resource.data.inviteCode;
+
+      // Leaving: remove only yourself (managers must hand over first).
+      allow update: if isMember(messId)
+        && onlyChanges(['memberUids'])
+        && resource.data.managerUid != me()
+        && request.resource.data.memberUids.toSet() == resource.data.memberUids.toSet().difference([me()].toSet());
+
+      allow delete: if false;
+
+      match /members/{uid} {
+        allow read: if isMember(messId);
+        // Joining member: role must be 'member' and the code must point at this mess.
+        allow create: if signedIn() && me() == uid
+          && request.resource.data.role == 'member'
+          && get(/databases/$(database)/documents/inviteCodes/$(request.resource.data.inviteCode)).data.messId == messId;
+        // Founder creates their own manager doc in the same batch as the mess.
+        allow create: if signedIn() && me() == uid
+          && request.resource.data.role == 'manager'
+          && getAfter(/databases/$(database)/documents/messes/$(messId)).data.managerUid == me();
+        // Members edit their own name/active flag; only the manager changes roles.
+        allow update: if (me() == uid && onlyChanges(['displayName', 'active'])) || isManager(messId);
+        allow delete: if false;
+      }
+
+      match /months/{monthId} {
+        allow read: if isMember(messId);
+        allow create: if isManager(messId)
+          || (signedIn() && getAfter(/databases/$(database)/documents/messes/$(messId)).data.managerUid == me());
+        // Closing stamps expireAt ≥ 30 days ahead; closed months can't be reopened or shortened.
+        allow update: if isManager(messId)
+          && resource.data.status == 'open'
+          && (request.resource.data.status == 'open'
+              || (request.resource.data.status == 'closed' && keepsThirtyDays(request.resource.data.expireAt)));
+        allow delete: if isMember(messId) && expired();
+
+        match /meals/{mealId} {
+          allow read: if isMember(messId);
+          // Members write only their own meal doc, only while the month is open.
+          // (Per-meal cutoff times are enforced in the app; the manager can always edit.)
+          allow create, update: if monthOpen(messId, monthId)
+            && ((isMember(messId) && request.resource.data.memberUid == me() && mealId.matches(me() + '_.*'))
+                || isManager(messId));
+          // The manager stamps expireAt on close.
+          allow update: if isManager(messId) && onlyChanges(['expireAt']) && keepsThirtyDays(request.resource.data.expireAt);
+          allow delete: if isMember(messId) && expired();
+        }
+
+        match /bazar/{id} {
+          allow read: if isMember(messId);
+          allow create: if isManager(messId) && monthOpen(messId, monthId) && request.resource.data.amount > 0;
+          allow update: if isManager(messId) && onlyChanges(['expireAt']) && keepsThirtyDays(request.resource.data.expireAt);
+          // Corrections are allowed while the month is open (before any result exists).
+          allow delete: if (isManager(messId) && monthOpen(messId, monthId)) || (isMember(messId) && expired());
+        }
+
+        match /fixedCosts/{id} {
+          allow read: if isMember(messId);
+          allow create: if isManager(messId) && monthOpen(messId, monthId) && request.resource.data.amount >= 0;
+          allow update: if isManager(messId) && onlyChanges(['expireAt']) && keepsThirtyDays(request.resource.data.expireAt);
+          allow delete: if (isManager(messId) && monthOpen(messId, monthId)) || (isMember(messId) && expired());
+        }
+
+        match /deposits/{id} {
+          allow read: if isMember(messId);
+          // Members record their own deposit as pending; the manager confirms or rejects.
+          allow create: if isMember(messId) && monthOpen(messId, monthId)
+            && request.resource.data.memberUid == me()
+            && request.resource.data.status == 'pending'
+            && request.resource.data.amount > 0;
+          allow update: if isManager(messId) && monthOpen(messId, monthId)
+            && onlyChanges(['status', 'confirmedBy'])
+            && request.resource.data.status in ['confirmed', 'rejected'];
+          allow update: if isManager(messId) && onlyChanges(['expireAt']) && keepsThirtyDays(request.resource.data.expireAt);
+          allow delete: if isMember(messId) && expired();
+        }
+      }
+
+      // Daily per-user snapshots: written by the owner, kept ≥ 30 days.
+      match /snapshots/{id} {
+        allow read: if signedIn() && (resource.data.uid == me() || isManager(messId));
+        allow create, update: if isMember(messId)
+          && request.resource.data.uid == me()
+          && id == me() + '_' + request.resource.data.date
+          && keepsThirtyDays(request.resource.data.expireAt);
+        allow delete: if isMember(messId) && expired();
+      }
+
+      // Per-user month results: written by the manager at close, kept ≥ 30 days (or the mess's longer setting).
+      match /results/{id} {
+        allow read: if signedIn() && (resource.data.uid == me() || isManager(messId));
+        allow create: if isManager(messId)
+          && keepsThirtyDays(request.resource.data.expireAt)
+          && request.resource.data.expireAt >= request.time + duration.value(messDoc(messId).retentionDays * 24 - 1, 'h');
+        allow update: if false;
+        allow delete: if isMember(messId) && expired();
+      }
+    }
+  }
+}

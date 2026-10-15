@@ -1,0 +1,17 @@
+{
+  "name": "mess-hishab",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Mess Hishab (মেস হিসাব) — meal and bazar accounting for student messes in Bangladesh",
+  "type": "module",
+  "scripts": {
+    "build:css": "tailwindcss -i ./css/tailwind.src.css -o ./css/tailwind.css --minify",
+    "watch:css": "tailwindcss -i ./css/tailwind.src.css -o ./css/tailwind.css --watch",
+    "serve": "node scripts/serve.mjs",
+    "dev": "npm run build:css && node scripts/serve.mjs",
+    "test": "node --test tests/*.test.js"
+  },
+  "devDependencies": {
+    "tailwindcss": "3.4.17"
+  }
+}

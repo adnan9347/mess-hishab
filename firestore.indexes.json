@@ -1,0 +1,21 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "snapshots",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "uid", "order": "ASCENDING" },
+        { "fieldPath": "date", "order": "ASCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": [
+    { "collectionGroup": "snapshots", "fieldPath": "expireAt", "ttl": true, "indexes": [{ "order": "ASCENDING", "queryScope": "COLLECTION" }] },
+    { "collectionGroup": "results", "fieldPath": "expireAt", "ttl": true, "indexes": [{ "order": "ASCENDING", "queryScope": "COLLECTION" }] },
+    { "collectionGroup": "months", "fieldPath": "expireAt", "ttl": true, "indexes": [{ "order": "ASCENDING", "queryScope": "COLLECTION" }] },
+    { "collectionGroup": "meals", "fieldPath": "expireAt", "ttl": true, "indexes": [] },
+    { "collectionGroup": "bazar", "fieldPath": "expireAt", "ttl": true, "indexes": [] },
+    { "collectionGroup": "fixedCosts", "fieldPath": "expireAt", "ttl": true, "indexes": [] },
+    { "collectionGroup": "deposits", "fieldPath": "expireAt", "ttl": true, "indexes": [] }
+  ]
+}

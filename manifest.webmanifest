@@ -1,0 +1,18 @@
+{
+  "name": "মেস হিসাব · Mess Hishab",
+  "short_name": "মেস হিসাব",
+  "description": "Meal and bazar accounting for student messes in Bangladesh.",
+  "lang": "bn",
+  "start_url": "./#/today",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F5F6F4",
+  "theme_color": "#0F766E",
+  "icons": [
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
