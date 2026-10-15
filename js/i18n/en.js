@@ -106,8 +106,8 @@ export default {
     notFound: 'This month isn’t available', notFoundHint: 'It may still be open, or it was deleted after the retention period.'
   },
   settings: {
-    verified: 'Verified', unverified: 'Not verified', language: 'Language', theme: 'Theme', light: 'Light', dark: 'Dark', system: 'System',
-    toggleTheme: 'Switch light/dark theme', messRules: 'Mess rules', managerOnly: 'Manager only', cutoffs: 'Meal cutoff times',
+    verified: 'Verified', unverified: 'Not verified', language: 'Language',
+    messRules: 'Mess rules', managerOnly: 'Manager only', cutoffs: 'Meal cutoff times',
     breakfastWeight: 'Breakfast counts as', fullMeal: '1 meal', halfMeal: '½ meal',
     retention: 'Keep calculation data for', days: '{n} days', retentionHint: 'Minimum 30 days. Results and daily snapshots are deleted automatically after this.',
     handover: 'Hand over manager role', handoverButton: 'Hand over', handoverConfirm: 'Make {name} the manager?',

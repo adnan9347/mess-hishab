@@ -3,7 +3,7 @@ import { AuthRules, AuthError } from '../../auth/AuthService.js';
 import { esc } from '../../core/util.js';
 import { MODE, DEMO_ACCOUNT } from '../../config.js';
 
-/** Shared chrome for the signed-out screens: language + theme in the corner, centred card on desktop. */
+/** Shared chrome for the signed-out screens: language switch in the corner, centred card on desktop. */
 class AuthView extends View {
   static layout = 'bare';
   static live = false;
@@ -14,7 +14,6 @@ class AuthView extends View {
         ${back ? `<a href="#/${back}" class="icon-btn" aria-label="${esc(this.t('common.back'))}"><i class="bi bi-arrow-left"></i></a>` : '<span></span>'}
         <div class="tw-flex tw-items-center tw-gap-2">
           ${this.app.localeSwitch()}
-          ${this.app.themeButton()}
         </div>
       </div>`;
   }

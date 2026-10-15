@@ -99,7 +99,6 @@ export class DemoSeeder {
           email: 'demo@messhishab.app',
           photoURL: null,
           locale: null,
-          theme: null,
           messIds: [DEMO_MESS_ID],
           createdAt
         }

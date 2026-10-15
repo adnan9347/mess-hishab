@@ -1,13 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Two colours only: a blue gradient and white. -->
   <defs>
     <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#14917F"/>
-      <stop offset="1" stop-color="#0B5C55"/>
+      <stop offset="0" stop-color="#3B82F6"/>
+      <stop offset="1" stop-color="#1D4ED8"/>
     </linearGradient>
   </defs>
   <rect width="512" height="512" rx="112" fill="url(#g)"/>
-  <rect x="148" y="112" width="216" height="288" rx="36" fill="#fff" opacity=".96"/>
-  <rect x="188" y="168" width="136" height="20" rx="10" fill="#0F766E" opacity=".25"/>
-  <rect x="188" y="212" width="96" height="20" rx="10" fill="#0F766E" opacity=".25"/>
-  <path d="M196 300l36 36 88-88" fill="none" stroke="#0F766E" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="148" y="112" width="216" height="288" rx="36" fill="#fff"/>
+  <rect x="188" y="168" width="136" height="20" rx="10" fill="url(#g)"/>
+  <rect x="188" y="212" width="96" height="20" rx="10" fill="url(#g)"/>
+  <path d="M196 300l36 36 88-88" fill="none" stroke="url(#g)" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

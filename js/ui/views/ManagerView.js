@@ -99,7 +99,7 @@ export class ManagerView extends View {
         </div>`).join('')}
       <div class="list-row tw-font-semibold">
         <span class="tw-flex-1 tw-text-sm">${this.t('manager.perHead', { n: this.i18n.num(this.app.calc.activeMembers.length) })}</span>
-        <span class="tw-text-sm">${this.i18n.money(total)} → ${this.i18n.money(this.app.calc.fixedShare)}</span>
+        <span class="tw-text-sm">${this.i18n.money(total)} <i class="bi bi-arrow-right" aria-hidden="true"></i> ${this.i18n.money(this.app.calc.fixedShare)}</span>
         <span style="width:32px"></span>
       </div>`;
   }
@@ -196,7 +196,7 @@ export class ManagerView extends View {
     const transfers = app.calc.settle(undefined, app.state.data.mess.managerUid);
     const name = (id) => (id === FUND_ID ? this.t('settle.fund') : app.memberName(id));
     const preview = transfers.length
-      ? `<ul class="tw-list-none tw-p-0 tw-m-0 tw-flex tw-flex-col tw-gap-2">${transfers.map((t) => `<li class="tw-flex tw-justify-between tw-gap-3"><span>${esc(name(t.from))} → ${esc(name(t.to))}</span><strong>${this.i18n.money(t.amount)}</strong></li>`).join('')}</ul>`
+      ? `<ul class="tw-list-none tw-p-0 tw-m-0 tw-flex tw-flex-col tw-gap-2">${transfers.map((t) => `<li class="tw-flex tw-justify-between tw-gap-3"><span>${esc(name(t.from))} <i class="bi bi-arrow-right" aria-label="to"></i> ${esc(name(t.to))}</span><strong>${this.i18n.money(t.amount)}</strong></li>`).join('')}</ul>`
       : `<p class="tw-mb-0">${this.t('settle.nothing')}</p>`;
     const ok = await app.confirm({
       title: this.t('manager.closeConfirmTitle', { month: this.i18n.monthName(app.monthId) }),

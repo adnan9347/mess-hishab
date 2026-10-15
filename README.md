@@ -6,7 +6,8 @@ meal rate, each person's share and a month-end settlement of who pays whom — r
 - **Stack:** HTML, CSS, Bootstrap 5.3 (components), Tailwind CSS 3.4 (`tw-` utilities), vanilla JavaScript (ES modules, OOP)
 - **Backend:** Firebase Authentication + Cloud Firestore on the free Spark plan (no Cloud Functions, no Storage)
 - **Languages:** বাংলা (default) and English, with Bangla digits, dates and times
-- **Themes:** Light, Dark and System, with no flash on load
+- **Look:** light theme only — white surfaces, a pure blue gradient, single-colour (blue/white) icons
+- **Font:** [Anek Bangla](https://fonts.google.com/specimen/Anek+Bangla) everywhere — Bangla, English, both digit sets and ৳ (Google Fonts, SIL Open Font License)
 - **PWA:** installable, offline app shell, Firestore offline cache for data
 - **Retention:** every user's calculation data is kept for **at least 30 days** (configurable 30/60/90)
 
@@ -93,7 +94,7 @@ js/
 │   ├── FirestoreRepository.js Firebase mode (offline cache, batched month close)
 │   └── DemoSeeder.js         realistic sample mess
 ├── auth/              AuthService → DemoAuthService / FirebaseAuthService, AuthError
-├── core/              I18n, ThemeManager, Router, DhakaDate, SafeStorage, util
+├── core/              I18n, Router, DhakaDate, SafeStorage, util
 ├── ui/                View base class, components (AmountKeypad, ring…), StatementExporter, views/
 ├── i18n/              bn.js, en.js
 └── App.js             services, state, route guards, shell, toasts, dialogs

@@ -16,11 +16,11 @@ Each law below maps to something concrete in the product, with the file that imp
 | **Von Restorff Effect** — the different thing gets noticed | Manager, money | Pending deposit confirmations are the only tinted block on the manager screen, with a red badge on the tab. Red is reserved for "you owe". | `.attention-card`, `.nav-badge`, `.money-neg` |
 | **Law of Common Region / Similarity** | Mess, Settings | Each member is one card with a stable avatar colour (hashed from their id) wherever they appear; owes/gets colours are consistent everywhere. Settings are grouped into cards. | `hueFor()`, `.member-card`, `SettingsView.js` |
 | **Postel's Law** — be liberal in what you accept | Amounts, codes, email | Amounts accept "৳1,250", "1250", "১২৫০", "১,২৫০ টাকা"; invite codes accept lowercase and paste; emails are trimmed and lower-cased. | `Money.parse`, `OnboardingView.bindCodeBoxes`, `AuthRules.normalizeEmail` |
-| **Aesthetic-Usability Effect** | Everywhere | A calm teal fintech palette, tuned Bangla typography (Hind Siliguri, 1.6 line height), tabular numerals and a careful dark theme — trust matters when the app handles money. | `app.css` tokens |
+| **Aesthetic-Usability Effect** | Everywhere | One light theme: white surfaces, a pure blue gradient and single-colour blue/white icons (contrast-tested by `tests/contrast.test.js`), Anek Bangla for both scripts with a 1.6 line height for Bangla, tabular numerals — trust matters when the app handles money. | `app.css` tokens |
 
 ## Accessibility
 
-- WCAG AA contrast in both themes (dark mode uses dark text on the brand colour for primary buttons).
+- WCAG AA contrast for every text colour, including white text across every stop of the blue gradient.
 - Visible focus rings, skip link, `aria-pressed` on toggles, `role="radiogroup"` on segmented controls, live regions for amounts and toasts.
 - Touch targets ≥ 44 px; hover styles only on hover-capable pointers; `prefers-reduced-motion` respected.
 - `lang` switches between `bn` and `en` so screen readers pronounce text correctly.

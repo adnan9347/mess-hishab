@@ -214,19 +214,15 @@ export class HishabView extends View {
           }
         },
         scales: {
-          x: { grid: { display: false }, border: { display: false }, ticks: { color: rgb('--c-text-2'), maxTicksLimit: 6, font: { family: 'Inter, "Hind Siliguri"' } } },
+          x: { grid: { display: false }, border: { display: false }, ticks: { color: rgb('--c-text-2'), maxTicksLimit: 6, font: { family: '"Anek Bangla", sans-serif' } } },
           y: {
             grid: { color: rgba('--c-border', 0.6) },
             border: { display: false },
-            ticks: { color: rgb('--c-text-2'), maxTicksLimit: 5, callback: (v) => fmt(v), font: { family: 'Inter, "Hind Siliguri"' } }
+            ticks: { color: rgb('--c-text-2'), maxTicksLimit: 5, callback: (v) => fmt(v), font: { family: '"Anek Bangla", sans-serif' } }
           }
         }
       }
     });
-  }
-
-  onThemeChange() {
-    this.drawChart();
   }
 
   destroy() {

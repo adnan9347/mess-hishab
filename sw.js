@@ -1,5 +1,5 @@
 // Offline app shell: local files are pre-cached; CDN assets are cached on first use (stale-while-revalidate).
-const VERSION = 'mh-v1';
+const VERSION = 'mh-v3';
 const SHELL = [
   './',
   './index.html',
@@ -14,7 +14,6 @@ const SHELL = [
   './js/core/I18n.js',
   './js/core/Router.js',
   './js/core/Storage.js',
-  './js/core/ThemeManager.js',
   './js/core/util.js',
   './js/domain/HishabCalculator.js',
   './js/domain/MealEntry.js',

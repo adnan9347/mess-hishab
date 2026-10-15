@@ -106,8 +106,8 @@ export default {
     notFound: 'এই মাসটি পাওয়া যাচ্ছে না', notFoundHint: 'হয়তো এখনো খোলা আছে, অথবা সংরক্ষণের সময় শেষ হয়ে মুছে গেছে।'
   },
   settings: {
-    verified: 'ভেরিফায়েড', unverified: 'ভেরিফাই হয়নি', language: 'ভাষা', theme: 'থিম', light: 'লাইট', dark: 'ডার্ক', system: 'সিস্টেম',
-    toggleTheme: 'লাইট/ডার্ক থিম বদলান', messRules: 'মেসের নিয়ম', managerOnly: 'শুধু ম্যানেজার', cutoffs: 'মিল জানানোর শেষ সময়',
+    verified: 'ভেরিফায়েড', unverified: 'ভেরিফাই হয়নি', language: 'ভাষা',
+    messRules: 'মেসের নিয়ম', managerOnly: 'শুধু ম্যানেজার', cutoffs: 'মিল জানানোর শেষ সময়',
     breakfastWeight: 'সকালের নাস্তা ধরা হবে', fullMeal: '১ মিল', halfMeal: '½ মিল',
     retention: 'হিসাবের তথ্য রাখা হবে', days: '{n} দিন', retentionHint: 'কমপক্ষে ৩০ দিন। এরপর ফলাফল ও দৈনিক স্ন্যাপশট নিজে থেকেই মুছে যাবে।',
     handover: 'ম্যানেজারের দায়িত্ব হস্তান্তর', handoverButton: 'হস্তান্তর', handoverConfirm: '{name}-কে ম্যানেজার বানাবেন?',

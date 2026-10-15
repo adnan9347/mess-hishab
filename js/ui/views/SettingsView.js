@@ -8,7 +8,7 @@ import { esc } from '../../core/util.js';
 import { MODE } from '../../config.js';
 import { RepoError } from '../../data/Repository.js';
 
-/** Profile, language, theme, mess rules and data — grouped into cards (Law of Common Region). */
+/** Profile, language, mess rules and data — grouped into cards (Law of Common Region). */
 export class SettingsView extends View {
   static ownHeading = true;
 
@@ -52,14 +52,6 @@ export class SettingsView extends View {
               { value: 'bn', label: 'বাংলা' },
               { value: 'en', label: 'English' }
             ], this.i18n.locale, { label: this.t('settings.language'), size: 'seg--block' })}
-          </div>
-          <div>
-            <div class="eyebrow tw-mb-2">${this.t('settings.theme')}</div>
-            ${segmented('theme', [
-              { value: 'light', label: this.t('settings.light'), icon: 'bi-sun' },
-              { value: 'dark', label: this.t('settings.dark'), icon: 'bi-moon' },
-              { value: 'system', label: this.t('settings.system'), icon: 'bi-circle-half' }
-            ], app.theme.mode, { label: this.t('settings.theme'), size: 'seg--block' })}
           </div>
         </section>
 
@@ -141,7 +133,6 @@ export class SettingsView extends View {
   bind() {
     const { app } = this;
     this.on('click', '[data-seg=locale] .seg__btn', (e, el) => app.setLocale(el.dataset.value));
-    this.on('click', '[data-seg=theme] .seg__btn', (e, el) => app.setTheme(el.dataset.value));
     this.on('click', '[data-action=copy-code]', () => app.copyInviteCode());
 
     this.on('submit', '[data-form=name]', async (e) => {

@@ -1,6 +1,5 @@
 import { MODE, FIREBASE_CONFIG, FIREBASE_SDK_VERSION } from './config.js';
 import { I18n } from './core/I18n.js';
-import { ThemeManager } from './core/ThemeManager.js';
 import { Router } from './core/Router.js';
 import { DhakaDate } from './core/DhakaDate.js';
 import { esc, debounce } from './core/util.js';
@@ -52,7 +51,6 @@ export class App {
   constructor(root) {
     this.root = root;
     this.i18n = new I18n();
-    this.theme = new ThemeManager();
     this.state = App.emptyState();
     this.view = null;
     this.verifyDismissed = false;
@@ -75,10 +73,6 @@ export class App {
     this.i18n.addEventListener('change', () => {
       this.auth.setLanguage?.(this.i18n.locale);
       this.router.resolve();
-    });
-    this.theme.addEventListener('change', () => {
-      document.querySelectorAll('[data-action=toggle-theme] i').forEach((i) => (i.className = `bi ${this.themeIcon()}`));
-      this.view?.onThemeChange?.();
     });
     window.addEventListener('online', () => this.updateOfflineChip());
     window.addEventListener('offline', () => this.updateOfflineChip());
@@ -126,14 +120,12 @@ export class App {
         email: user.email,
         photoURL: user.photoURL,
         locale: this.i18n.locale,
-        theme: this.theme.mode,
         messIds: []
       };
       await this.repo.saveProfile(user.uid, profile);
     } else {
       // Bring this device in line with the person's saved preferences.
       if (profile.locale) this.i18n.setLocale(profile.locale);
-      if (profile.theme) this.theme.setMode(profile.theme);
     }
     this.state.profile = profile;
     await this.selectMess(profile.messIds?.[0] ?? null);
@@ -304,11 +296,6 @@ export class App {
     if (this.uid) this.repo.saveProfile(this.uid, { locale }).catch(() => {});
   }
 
-  setTheme(mode) {
-    this.theme.setMode(mode);
-    if (this.uid) this.repo.saveProfile(this.uid, { theme: mode }).catch(() => {});
-    if (this.view instanceof SettingsView) this.view.update();
-  }
 
   async copyInviteCode() {
     const code = this.state.data?.mess.inviteCode;
@@ -394,7 +381,7 @@ export class App {
           <div class="brand-mark"><span class="brand-mark__logo"><i class="bi bi-journal-check"></i></span><span>${this.t('app.name')}</span></div>
           ${mess ? `<div class="sidebar__mess"><div class="tw-text-xs tw-text-muted">${this.i18n.monthName(mess.currentMonth)}</div><div class="tw-font-semibold tw-truncate">${esc(mess.name)}</div></div>` : ''}
           <nav class="sidebar__nav" aria-label="${esc(this.t('nav.label'))}" data-nav="side">${this.navLinks(activeTab, pending, 'side')}</nav>
-          <div class="sidebar__foot">${this.localeSwitch()}${this.themeButton()}</div>
+          <div class="sidebar__foot">${this.localeSwitch()}</div>
         </aside>
         <div class="shell__main">
           <header class="topbar">
@@ -406,7 +393,6 @@ export class App {
             </div>
             <div class="topbar__actions">
               <span class="offline-chip d-none" data-offline><i class="bi bi-cloud-slash"></i> ${this.t('common.offline')}</span>
-              <span class="lg:tw-hidden">${this.themeButton()}</span>
               <a href="#/settings" class="avatar-link" aria-label="${esc(this.t('nav.settings'))}">${avatar({ uid: this.uid, displayName: this.displayName() }, 36)}</a>
             </div>
           </header>
@@ -463,13 +449,7 @@ export class App {
       </div>`;
   }
 
-  themeIcon() {
-    return this.theme.resolved === 'dark' ? 'bi-sun' : 'bi-moon-stars';
-  }
 
-  themeButton() {
-    return `<button type="button" class="icon-btn" data-action="toggle-theme" aria-label="${esc(this.t('settings.toggleTheme'))}"><i class="bi ${this.themeIcon()}"></i></button>`;
-  }
 
   updateOfflineChip() {
     this.root.querySelector('[data-offline]')?.classList.toggle('d-none', navigator.onLine);
@@ -482,9 +462,6 @@ export class App {
       switch (el.dataset.action) {
         case 'set-locale':
           this.setLocale(el.dataset.locale);
-          break;
-        case 'toggle-theme':
-          this.setTheme(this.theme.resolved === 'dark' ? 'light' : 'dark');
           break;
         case 'dismiss-verify':
           this.verifyDismissed = true;

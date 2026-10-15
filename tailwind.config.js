@@ -3,7 +3,6 @@
 export default {
   prefix: 'tw-',
   content: ['./index.html', './js/**/*.js'],
-  darkMode: 'class',
   corePlugins: { preflight: false },
   theme: {
     extend: {
@@ -20,7 +19,7 @@ export default {
         danger: 'rgb(var(--c-danger) / <alpha-value>)',
         warning: 'rgb(var(--c-warning) / <alpha-value>)'
       },
-      fontFamily: { sans: ['Inter', '"Hind Siliguri"', 'system-ui', 'sans-serif'] },
+      fontFamily: { sans: ['"Anek Bangla"', 'system-ui', 'sans-serif'] },
       borderRadius: { card: '20px' }
     }
   }

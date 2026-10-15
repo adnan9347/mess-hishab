@@ -27,7 +27,7 @@ export class OnboardingView extends View {
           <div class="step-dots" aria-label="${esc(this.t('onboarding.step', { n: this.i18n.num(n), total: this.i18n.num(3) }))}">
             ${[1, 2, 3].map((i) => `<span class="${i <= n ? 'is-done' : ''} ${i === n ? 'is-current' : ''}"></span>`).join('')}
           </div>
-          <div class="tw-flex tw-items-center tw-gap-2">${this.app.localeSwitch()}${this.app.themeButton()}</div>
+          <div class="tw-flex tw-items-center tw-gap-2">${this.app.localeSwitch()}</div>
         </div>
         <div class="auth-card">${this[`${this.step}Panel`]()}</div>
       </div>`;

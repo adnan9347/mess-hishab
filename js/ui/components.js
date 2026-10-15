@@ -14,6 +14,7 @@ export function ring(progress, { size = 168, stroke = 14, tone = 'brand' } = {})
   const p = Math.max(0, Math.min(1, progress));
   return `
     <svg class="ring ring--${tone}" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" role="presentation">
+      <defs><linearGradient id="ring-gradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="ring__stop-a"/><stop offset="1" class="ring__stop-b"/></linearGradient></defs>
       <circle class="ring__track" cx="${size / 2}" cy="${size / 2}" r="${r}" stroke-width="${stroke}" fill="none"/>
       <circle class="ring__bar" cx="${size / 2}" cy="${size / 2}" r="${r}" stroke-width="${stroke}" fill="none"
         stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c}" data-offset="${c * (1 - p)}"
