@@ -28,6 +28,7 @@ Other scripts:
 
 | Command | What it does |
 |---|---|
+| `npm run build` | Production build into `dist/` (used by Vercel) |
 | `npm run build:css` | Builds `css/tailwind.css` from the classes used in `index.html` and `js/` |
 | `npm run watch:css` | Rebuilds Tailwind on change |
 | `npm run serve` | Static server only (no CSS build) |
@@ -71,7 +72,7 @@ It's a static site. Either Firebase Hosting (free on Spark):
 npx firebase-tools deploy --only hosting --project YOUR_PROJECT_ID
 ```
 
-…or drag the folder into Vercel/Netlify. Run `npm run build:css` first; `node_modules` is not needed at runtime.
+…or Vercel: `vercel.json` runs `npm run build`, which compiles Tailwind and copies the site into `dist/`.
 
 ### Free-tier limits that matter
 
